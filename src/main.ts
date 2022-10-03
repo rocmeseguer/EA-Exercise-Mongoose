@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 // Connection
-mongoose.connect('mongodb://localhost:27017/ea-mongoose');
+mongoose.connect('mongodb://localhost:27017/ea-mongoose')
+  .catch((error) => console.log(error));
 
 // schema and model
 import User from './models/User';
@@ -35,13 +36,33 @@ const user1 = {
 // Insert
 const newUser= new User(user1);
 newUser.save()
-    .then(()=> console.log('User Inserted ') )
-
-// Find
-User.findOne({id: 1}).exec()
-    .then( (userFound) => {
-        console.log(userFound._id)
-        const newTodo = new Todo({id: 2, user: userFound._id, name: "Test"});
-        newTodo.save().then(()=> console.log(' Todo Inserted ') );
+    .then((user)=> {
+        console.log('User Inserted ' + user) 
+    })
+    .catch((error) => {
+        //console.log(error);
     });
 
+
+// Find and Insert
+User.findOne({id: 1}).exec()
+    .then( (userFound) => {
+        console.log(userFound)
+        const newTodo = new Todo({id: 2, user: userFound._id, name: "Test"});
+        newTodo.save()
+          .then(() => console.log(' Todo Inserted ') )
+          .catch((error) => console.log(' Todo duplicated' ));
+    })
+    .catch((error) => {
+      //console.log(error);
+    });
+
+
+// Populate
+Todo.findOne({id: 2}).populate('user').exec()
+    .then( (todoFound) => {
+        console.log(todoFound)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
