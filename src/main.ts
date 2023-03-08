@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/ea-mongoose')
   .catch((error) => console.log(error));
 
-// schema and model
-import User from './models/User';
-import Todo from './models/Todo';
+// Madel and Interface
+import { IUser, UserModel } from './models/User';
+import { ITodo, TodoModel } from './models/Todo';
 
 // One user
-const user1 = {
+const user1: IUser = {
     "id": 1,
     "name": "Leanne Graham",
     "username": "Bret",
@@ -28,41 +28,62 @@ const user1 = {
     "website": "hildegard.org",
     "company": {
       "name": "Romaguera-Crona",
-      "catchPhrase": "Multi-layered client-server neural-net",
-      "bs": "harness real-time e-markets"
     }
 }
 
 // Insert
-const newUser= new User(user1);
+const newUser= new UserModel(user1);
 newUser.save()
-    .then((user)=> {
-        console.log('User Inserted ' + user) 
+    .then( user => {
+        console.log('User Inserted ' + user._id + ' ' + user.id) 
     })
-    .catch((error) => {
-        //console.log(error);
+    .catch( error => {
+        console.log(error);
     });
 
 
 // Find and Insert
-User.findOne({id: 1}).exec()
-    .then( (userFound) => {
-        console.log(userFound)
-        const newTodo = new Todo({id: 2, user: userFound._id, name: "Test"});
+UserModel.findOne({id: 1}).exec()
+    .then( userFound => {
+        console.log('User Found ' + userFound._id + ' ' + userFound.id)
+        const newTodo = new TodoModel({id: 2, user: userFound._id, name: "Test"});
         newTodo.save()
-          .then(() => console.log(' Todo Inserted ') )
-          .catch((error) => console.log(' Todo duplicated' ));
+          .then( todo => console.log(' Todo Inserted '  + todo._id + ' ' + todo.id) )
+          .catch( error  => console.log(' Todo duplicated' ));
     })
     .catch((error) => {
-      //console.log(error);
+      console.log(error);
     });
 
 
 // Populate
-Todo.findOne({id: 2}).populate('user').exec()
-    .then( (todoFound) => {
-        console.log(todoFound)
+TodoModel.findOne({id: 2}).exec()
+    .then( todoFound => {
+        console.log(' Todo without Populate ' + todoFound)
     })
+    .catch((error) => {
+      console.log(error);
+    });
+
+
+TodoModel.findOne({id: 2}).populate('user').exec()
+    .then( todoFound => {
+        console.log(' Todo with Populate ' + todoFound)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+
+// Delete
+TodoModel.deleteMany({}).exec()
+    .then( () => console.log( ' Todo deleted '))
+    .catch((error) => {
+      console.log(error);
+    });
+
+UserModel.deleteMany({}).exec()
+    .then( () => console.log( ' User deleted '))
     .catch((error) => {
       console.log(error);
     });
