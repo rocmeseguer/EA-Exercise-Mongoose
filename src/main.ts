@@ -38,7 +38,7 @@ newUser.save()
         console.log('User Inserted ' + user._id + ' ' + user.id) 
     })
     .catch( error => {
-        console.log(error);
+        console.log('Error: Insert user1');
     });
 
 
@@ -52,7 +52,7 @@ UserModel.findOne({id: 1}).exec()
           .catch( error  => console.log(' Todo duplicated' ));
     })
     .catch((error) => {
-      console.log(error);
+		console.log('Error: Find and Insert');
     });
 
 
@@ -62,7 +62,7 @@ TodoModel.findOne({id: 2}).exec()
         console.log(' Todo without Populate ' + todoFound)
     })
     .catch((error) => {
-      console.log(error);
+      console.log('Error: Todo without Populate');
     });
 
 
@@ -71,7 +71,7 @@ TodoModel.findOne({id: 2}).populate('user').exec()
         console.log(' Todo with Populate ' + todoFound)
     })
     .catch((error) => {
-      console.log(error);
+      console.log('Error: Todo with Populate');
     });
 
 
@@ -79,11 +79,12 @@ TodoModel.findOne({id: 2}).populate('user').exec()
 TodoModel.deleteMany({}).exec()
     .then( () => console.log( ' Todo deleted '))
     .catch((error) => {
-      console.log(error);
+      console.log('Error: Delete');
     });
 
 UserModel.deleteMany({}).exec()
     .then( () => console.log( ' User deleted '))
     .catch((error) => {
-      console.log(error);
+      console.log('Error: Delete');
     });
+
