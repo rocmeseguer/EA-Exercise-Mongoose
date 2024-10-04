@@ -12,22 +12,10 @@ async function Main() {
 
 // One user
 const user1: IUser = {
-    "id": 1,
     "name": "Leanne Graham",
     "username": "Bret",
     "email": "Sincere@april.biz",
-    "address": {
-      "street": "Kulas Light",
-      "suite": "Apt. 556",
-      "city": "Gwenborough",
-      "zipcode": "92998-3874",
-      "geo": {
-        "lat": "-37.3159",
-        "lng": "81.1496"
-      }
-    },
     "phone": "1-770-736-8031 x56442",
-    "website": "hildegard.org",
     "company": {
       "name": "Romaguera-Crona",
     }
@@ -36,62 +24,63 @@ const user1: IUser = {
 // Insert User
 const newUser= new UserModel(user1);
 await newUser.save()
-    .then( user => {
-        console.log('User Inserted ' + user._id + ' ' + user.id) 
-    })
-    .catch( error => {
-        console.log(error);
-    });
+    .then( user => console.log('User Inserted ' + user._id))
+    .catch( error => console.log(error));
 
 // Insert Todo
-const newTodo = new TodoModel({id: 2, user: newUser._id, name: "Test"});
-await newTodo.save()
-    .then( todo => console.log(' Todo Inserted '  + todo._id + ' ' + todo.id) )
-    .catch( error  => console.log(' Todo duplicated' ));
+const newTodo = new TodoModel({code: 2, user: newUser._id, name: "Test"});
+
+try {
+  const savedTodo = await newTodo.save();
+  console.log(' Todo Inserted '  + savedTodo._id);
+  const user = await UserModel
+    .findByIdAndUpdate(newTodo.user,{$addToSet:{todos:savedTodo._id}});
+} catch( error ) { console.log(' Error: ' +  error) };
 
 // Insert Todo
-const newTodo2 = new TodoModel({id: 3, user: newUser._id, name: "Test"});
-await newTodo2.save()
-    .then( todo => console.log(' Todo Inserted '  + todo._id + ' ' + todo.id) )
-    .catch( error  => console.log(' Todo duplicated' ));
+const newTodo2 = new TodoModel({code: 3, user: newUser._id, name: "Test2"});
+
+try {
+  const savedTodo = await newTodo2.save();
+  console.log(' Todo Inserted '  + savedTodo._id);
+  const user = await UserModel
+    .findByIdAndUpdate(newTodo.user,{$addToSet:{todos:savedTodo._id}});
+} catch( error ) { console.log(' Error: ' +  error) };
+
+// Find
 
 await TodoModel.find({}).exec()
     .then( todoFound => console.log(' Todos '  + todoFound) )
-    .catch((error) => {
-      console.log(error);
-    });    
+    .catch((error) => console.log(error));    
 
 // Populate
-await TodoModel.findOne({id: 2}).exec()
-    .then( todoFound => {
-        console.log(' Todo without Populate ' + todoFound)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+await TodoModel.findOne({code: 2}).exec()
+    .then( todoFound => console.log(' Todo without Populate ' + todoFound))
+    .catch((error) => console.log(error));
 
 
-await TodoModel.findOne({id: 2}).populate('user').exec()
-    .then( todoFound => {
-        console.log(' Todo with Populate ' + todoFound)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+await TodoModel.findOne({code: 2}).populate('user').exec()
+    .then( todoFound => console.log(' Todo with Populate ' + todoFound))
+    .catch((error) => console.log(error));
 
 
 // Delete
+
+// An ObjectID of todos
+
+await UserModel.findByIdAndUpdate(newUser._id,{$pull:{todos:newTodo._id}});
+
+// Todos
+
 await TodoModel.deleteMany({}).exec()
     .then( () => console.log( ' Todo deleted '))
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
+
+// User
 
 await UserModel.deleteMany({}).exec()
     .then( () => console.log( ' User deleted '))
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
 
 }
 

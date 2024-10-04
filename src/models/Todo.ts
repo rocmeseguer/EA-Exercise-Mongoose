@@ -1,7 +1,7 @@
 import { ObjectId, Schema, model } from "mongoose";
 
 export interface ITodo {
-    id: number;
+    code: number;
     user: ObjectId;
     name: string;
     completed: boolean
@@ -9,7 +9,7 @@ export interface ITodo {
 
 
 const TodoSchema = new Schema<ITodo>({
-  id: { type: Number, required: true, unique: true },
+  code: { type: Number, required: true, unique: true },
   user: { type: Schema.Types.ObjectId, ref: "User" },
   name: { type: String },
   completed: { type: Boolean, default: false }
