@@ -2,7 +2,7 @@ import { startConnection } from './database.js';
 import { IUser } from './models/User.js';
 import { createUser, findAllUsers } from './services/User.js';
 import { ITodo } from './models/Todo.js';
-import { createTodo  } from './services/Todo.js';
+import { createTodo, findTodoByCode, findTodoByCodeWithUser  } from './services/Todo.js';
 
 async function main() {
     startConnection();    
@@ -32,6 +32,14 @@ async function main() {
     // Insert todo
     const newTodo = await createTodo(todo1, user1);
     console.log('Todo Inserted ' + newTodo);
+
+    // Find Todo
+    const todo2 = await findTodoByCode(1);
+    console.log('Todo  ' + todo2);
+
+    // Find Todo with User
+    const todo3 = await findTodoByCodeWithUser(1);
+    console.log('Todo with User ' + todo3);
 
     // Find All Users
     const users = await findAllUsers();

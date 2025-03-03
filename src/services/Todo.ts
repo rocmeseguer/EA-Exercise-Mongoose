@@ -27,3 +27,13 @@ export async function createTodo(todo:Partial<ITodo>, user: IUser): Promise<ITod
 
     return insertedTodo;
 }
+
+// Find Todo by code
+export async function findTodoByCode(code: number): Promise<ITodo|null> {
+    return await TodoModel.findOne({ code: code });
+}
+
+// Find Todo by code with populated user
+export async function findTodoByCodeWithUser(code: number): Promise<ITodo|null> {
+    return await TodoModel.findOne({ code: code }).populate('user');
+}
