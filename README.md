@@ -49,5 +49,5 @@ tsc
 
 Ejecutar JS
 ```
-node build/main.js
+node dist/index.js
 ```

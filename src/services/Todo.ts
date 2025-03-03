@@ -1,7 +1,7 @@
 // Model and Interface
 import { ITodo, TodoModel } from '../models/Todo.js';
 import { IUser, UserModel } from '../models/User.js';
-import { insertTodosOfUserById } from '../services/User.js';
+import { insertTodoOfUserById } from '../services/User.js';
 
 // Insert a user's Todo
 export async function createTodo(todo:Partial<ITodo>, user: IUser): Promise<ITodo|null> {
@@ -23,7 +23,7 @@ export async function createTodo(todo:Partial<ITodo>, user: IUser): Promise<ITod
     } 
 
     // Insert Todo in User
-    await insertTodosOfUserById(insertedTodo.user, insertedTodo._id);
+    await insertTodoOfUserById(insertedTodo.user, insertedTodo._id);
 
     return insertedTodo;
 }

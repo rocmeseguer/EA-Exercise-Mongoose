@@ -24,7 +24,7 @@ export async function deleteUserById(id: string): Promise<IUser|null> {
 }
 
 // Insert Todo of User by _id
-export async function insertTodosOfUserById(userId: Types.ObjectId, todoId: Types.ObjectId): Promise<void|null> {
+export async function insertTodoOfUserById(userId: Types.ObjectId, todoId: Types.ObjectId): Promise<void|null> {
     return await UserModel.findByIdAndUpdate(userId ,{$addToSet:{todos: todoId}});
 }
 
