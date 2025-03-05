@@ -1,5 +1,4 @@
 import { ObjectId, Schema, model } from "mongoose";
-import { ITodo } from './Todo.js';
 
 export interface IUser {
     name: string;
